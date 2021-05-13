@@ -1,6 +1,6 @@
 variable "project_id" {
   type        = string
-  default     = "zain-sandbox-313010"
+  default     = "zain-sandbox-313612"
 }
 
 variable "network_name" {
