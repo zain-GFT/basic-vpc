@@ -10,7 +10,7 @@ steps:
         echo "***********************"
 
   - id: 'create bucket'
-    name: 'gcr.io/cloud-builders/gsutil'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
       - '-c'
