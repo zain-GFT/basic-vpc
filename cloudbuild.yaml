@@ -9,13 +9,24 @@ steps:
         echo "$BRANCH_NAME"
         echo "***********************"
 
+  - id: 'create bucket'
+    name: 'gcr.io/cloud-builders/gsutil'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        buckets=$(sudo gsutil ls -p $PROJECT_ID | grep “${REPO_NAME}-tfstate”)
+        if [ -z "$buckets" ]; then
+          sudo gsutil mb -b on -p $PROJECT_ID “gs://${REPO_NAME}-tfstate“
+        fi
+
   - id: 'tf init'
     name: 'hashicorp/terraform:0.13.0'
     entrypoint: 'sh'
     args:
       - '-c'
       - |
-        terraform init
+        terraform init -backend-config=“bucket=${REPO_NAME}-tfstate” -backend-config=“prefix=${REPO_NAME}-terraform-state”
 
   # [START tf-plan]
   - id: 'tf plan'
