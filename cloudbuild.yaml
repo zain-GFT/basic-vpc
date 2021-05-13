@@ -19,7 +19,7 @@ steps:
         gsutil ls -p $PROJECT_ID
         buckets=$(gsutil ls -p $PROJECT_ID | grep “${REPO_NAME}-tfstate”)
         if [ -z "$buckets" ]; then
-          gsutil mb -b on -p $PROJECT_ID “gs://${REPO_NAME}-tfstate“
+          gsutil mb -b on -p $PROJECT_ID gs://${REPO_NAME}-tfstate
         fi
 
   - id: 'tf init'
