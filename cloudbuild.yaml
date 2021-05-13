@@ -16,7 +16,6 @@ steps:
       - '-c'
       - |
         echo "hello"
-        gsutil ls -p $PROJECT_ID
         buckets=$(gsutil ls -p $PROJECT_ID | grep “${REPO_NAME}-tfstate”)
         if [ -z "$buckets" ]; then
           gsutil mb -b on -p $PROJECT_ID gs://${REPO_NAME}-tfstate
@@ -28,7 +27,7 @@ steps:
     args:
       - '-c'
       - |
-        terraform init -backend-config=“bucket=${REPO_NAME}-tfstate” -backend-config=“prefix=${REPO_NAME}-terraform-state”
+        terraform init -backend-config=bucket=${REPO_NAME}-tfstate -backend-config=prefix=${REPO_NAME}-terraform-state
 
   # [START tf-plan]
   - id: 'tf plan'
