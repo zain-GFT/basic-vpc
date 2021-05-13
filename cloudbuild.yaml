@@ -11,10 +11,10 @@ steps:
 
   - id: 'create bucket'
     name: 'gcr.io/cloud-builders/gsutil'
-    entrypoint: 'sh'
+    entrypoint: 'bash'
     args:
       - '-c'
-      - |
+      - | -
         buckets=$(gsutil ls -p $PROJECT_ID | grep “${REPO_NAME}-tfstate”)
         if [ -z "$buckets" ]; then
           gsutil mb -b on -p $PROJECT_ID “gs://${REPO_NAME}-tfstate“
