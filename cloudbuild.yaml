@@ -16,7 +16,7 @@ steps:
       - '-c'
       - |
         echo "hello"
-        buckets=$(gsutil ls -p $PROJECT_ID | grep ${REPO_NAME}-tfstatee)
+        buckets=$(gsutil ls -p $PROJECT_ID | grep "${REPO_NAME}-tfstatee")
         if [ -z "$buckets" ]; then
           gsutil mb -b on -p $PROJECT_ID gs://${REPO_NAME}-tfstatee
         fi
