@@ -16,3 +16,11 @@ steps:
       - '-c'
       - |
         gcloud beta builds triggers run --branch=$BRANCH_NAME build-log-bucket-trigger
+  # [delete trigger]
+  - id: 'delete trigger'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        gcloud beta builds triggers delete build-log-bucket-trigger
