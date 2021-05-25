@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo $PROJECT_ID
 gcloud config set project $PROJECT_ID
 triggers=$(gcloud beta builds triggers list | grep build-log-bucket-trigger)
 if [ -z "$triggers" ]; then
