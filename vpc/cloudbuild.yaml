@@ -33,7 +33,7 @@ steps:
     args:
       - '-c'
       - |
-        terraform plan
+        terraform -chdir=vpc/ plan
   # [END tf-plan]
 
   # [START tf-apply]
@@ -44,7 +44,7 @@ steps:
       - '-c'
       - |
         if [ $BRANCH_NAME = "main" ]; then
-          terraform apply -auto-approve
+          terraform -chdir=vpc/ apply -auto-approve
         else
           echo "***************************** SKIPPING APPLYING *******************************"
           echo "Branch '$BRANCH_NAME' does not represent an oficial environment."
