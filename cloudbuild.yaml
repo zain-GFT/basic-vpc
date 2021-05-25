@@ -6,7 +6,7 @@ steps:
     args:
       - '-c'
       - |
-        source buckets/trigger.sh
+        source vpc/trigger.sh
   # [Run trigger]
   - id: 'run trigger'
     name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
