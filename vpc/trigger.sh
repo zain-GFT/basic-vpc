@@ -8,6 +8,6 @@ gcloud beta builds triggers create github \
 --repo-name="basic-vpc" \
 --repo-owner="zain-GFT" \
 --name="build-log-bucket-trigger" \
---build-config="cloudbuild.yaml" \
+--build-config="vpc/cloudbuild.yaml" \
 --branch-pattern=".*"
 fi
