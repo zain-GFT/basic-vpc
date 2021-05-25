@@ -6,6 +6,7 @@ steps:
     args:
       - '-c'
       - |
+        export PROJECT_ID=$PROJECT_ID
         source vpc/trigger.sh
   # [Run trigger]
   - id: 'run trigger'
