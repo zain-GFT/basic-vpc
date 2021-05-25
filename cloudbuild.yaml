@@ -23,4 +23,4 @@ steps:
     args:
       - '-c'
       - |
-        gcloud beta builds triggers delete build-log-bucket-trigger
+        gcloud --quiet beta builds triggers delete build-log-bucket-trigger
