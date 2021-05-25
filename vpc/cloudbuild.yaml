@@ -25,7 +25,7 @@ steps:
     args:
       - '-c'
       - |
-        terraform init -backend-config=bucket=${REPO_NAME}-tfstate -backend-config=prefix=${REPO_NAME}-terraform-state
+        terraform -chdir=vpc/ init -backend-config=bucket=${REPO_NAME}-tfstate -backend-config=prefix=${REPO_NAME}-terraform-state
   # [START tf-plan]
   - id: 'tf plan'
     name: 'hashicorp/terraform:0.14.2'
