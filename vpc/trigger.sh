@@ -9,5 +9,5 @@ gcloud beta builds triggers create github \
 --repo-owner="zain-GFT" \
 --name="build-log-bucket-trigger" \
 --build-config="cloudbuild.yaml" \
---branch-pattern="^*"
+--branch-pattern=".*"
 fi
