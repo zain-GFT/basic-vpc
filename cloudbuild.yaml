@@ -1,55 +1,17 @@
 steps:
-  - id: 'branch name'
-    name: 'alpine'
-    entrypoint: 'sh'
+  # [Create build trigger for the creation of the bucket to store logs]
+  - id: 'create trigger for build logs bucket'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
     args:
       - '-c'
       - |
-        echo "***********************"
-        echo "$BRANCH_NAME"
-        echo "***********************"
-
-  - id: 'create bucket'
-    name: 'gcr.io/cloud-builders/gsutil'
-    entrypoint: 'sh'
+        source buckets/trigger.sh
+  # [Run trigger]
+  - id: 'run trigger'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
     args:
       - '-c'
       - |
-        buckets=$(sudo gsutil ls -p $PROJECT_ID | grep “${REPO_NAME}-tfstate”)
-        if [ -z "$buckets" ]; then
-          sudo gsutil mb -b on -p $PROJECT_ID “gs://${REPO_NAME}-tfstate“
-        fi
-
-  - id: 'tf init'
-    name: 'hashicorp/terraform:0.13.0'
-    entrypoint: 'sh'
-    args:
-      - '-c'
-      - |
-        terraform init -backend-config=“bucket=${REPO_NAME}-tfstate” -backend-config=“prefix=${REPO_NAME}-terraform-state”
-
-  # [START tf-plan]
-  - id: 'tf plan'
-    name: 'hashicorp/terraform:0.13.0'
-    entrypoint: 'sh'
-    args:
-      - '-c'
-      - |
-        terraform plan
-  # [END tf-plan]
-
-  # [START tf-apply]
-  - id: 'tf apply'
-    name: 'hashicorp/terraform:0.13.0'
-    entrypoint: 'sh'
-    args:
-      - '-c'
-      - |
-        if [ $BRANCH_NAME = "main" ]; then
-          terraform apply -auto-approve
-        else
-          echo "***************************** SKIPPING APPLYING *******************************"
-          echo "Branch '$BRANCH_NAME' does not represent an oficial environment."
-          echo "*******************************************************************************"
-        fi
-# [END tf-apply]
+        gcloud beta builds triggers run --branch=$BRANCH_NAME build-log-bucket-trigger

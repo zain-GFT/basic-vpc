@@ -1,0 +1,53 @@
+steps:
+  - id: 'branch name'
+    name: 'alpine'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "***********************"
+        echo "$BRANCH_NAME"
+        echo "***********************"
+  - id: 'create bucket'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "hello"
+        buckets=$(gsutil ls -p $PROJECT_ID | grep ${REPO_NAME}-tfstate)
+        if [ -z "$buckets" ]; then
+          gsutil mb -b on -p $PROJECT_ID gs://${REPO_NAME}-tfstatee
+        fi
+  - id: 'tf init'
+    name: 'hashicorp/terraform:0.14.2'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        terraform init -backend-config=bucket=${REPO_NAME}-tfstate -backend-config=prefix=${REPO_NAME}-terraform-state
+  # [START tf-plan]
+  - id: 'tf plan'
+    name: 'hashicorp/terraform:0.14.2'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        terraform plan
+  # [END tf-plan]
+
+  # [START tf-apply]
+  - id: 'tf apply'
+    name: 'hashicorp/terraform:0.14.2'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        if [ $BRANCH_NAME = "main" ]; then
+          terraform apply -auto-approve
+        else
+          echo "***************************** SKIPPING APPLYING *******************************"
+          echo "Branch '$BRANCH_NAME' does not represent an oficial environment."
+          echo "*******************************************************************************"
+        fi
+# [END tf-apply]
