@@ -38,9 +38,9 @@ steps:
       - '-c'
       - |
         if [ -f ./ends/"${BRANCH_NAME}.tfvars" ]; then
-          terraform chdir=vpc/ plan -var-file="../ends/${BRANCH_NAME}.tfvars" -out=iac-plan
+          terraform -chdir=vpc/ plan -var-file="../ends/${BRANCH_NAME}.tfvars" -out=iac-plan
         else
-          terraform chdir=vpc/ plan -var-file="../ends/DEUBA2.tfvars" -out=iac-plan
+          terraform -chdir=vpc/ plan -var-file="../ends/DEUBA2.tfvars" -out=iac-plan
         fi
   # [END tf-plan]
 
@@ -52,7 +52,7 @@ steps:
       - '-c'
       - |
         if [ -f ./ends/"${BRANCH_NAME}.tfvars" ]; then
-          terraform chdir=vpc/ apply --auto-approve iac-plan
+          terraform -chdir=vpc/ apply --auto-approve iac-plan
         else
           echo "***************************** SKIPPING APPLYING *******************************"
           echo "Branch '$BRANCH_NAME' does not represent an oficial organisation."
