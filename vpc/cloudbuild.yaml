@@ -40,7 +40,7 @@ steps:
         if [ -f ./ends/"${BRANCH_NAME}.tfvars" ]; then
           terraform chdir=vpc/ plan -var-file="../ends/${BRANCH_NAME}.tfvars" -out=iac-plan
         else
-          terraform chdir=vpc/ plan -var-file="../ends/DEUBA2.tfvars" -out=iac-plan
+          terraform chdir=vpc/ plan -var-file="../ends/multiple.tfvars" -out=iac-plan
         fi
   # [END tf-plan]
 
