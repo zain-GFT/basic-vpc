@@ -6,7 +6,7 @@ subnets          = [
   {
     subnet_name = "subnet-01"
     subnet_ip = "10.10.20.0/24"
-    subnet_region = "europe-west2-a"
+    subnet_region = "europe-west2"
   }
 ]
 
