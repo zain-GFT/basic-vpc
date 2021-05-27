@@ -24,7 +24,20 @@ steps:
       - '-c'
       - |
         gcloud --quiet beta builds triggers delete build-log-bucket-trigger
-  # [Create build trigger for the creation of the VPC network]
+  # [wait for log bucket creation]
+  - id: 'wait for log bucket creation'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        buckets=$(gsutil ls -p $PROJECT_ID | grep ${REPO_NAME}-build-logs-${PROJECT_ID})
+        while [ -z "$buckets" ]
+        do
+        buckets=$(gsutil ls -p $PROJECT_ID | grep ${REPO_NAME}-build-logs-${PROJECT_ID})
+        sleep 10
+        done
+   # [Create build trigger for the creation of the VPC network]
   - id: 'create trigger for vpc network'
     name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
     entrypoint: '/bin/bash'
