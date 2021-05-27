@@ -6,11 +6,7 @@ module "vpc" {
   network_name = var.network_name
   routing_mode = "GLOBAL"
 
-  subnets = [
-    {
-      subnet_name = "subnet-01"
-      subnet_ip = "10.10.20.0/24"
-      subnet_region = "us-west1"
-    }
-  ]
+  subnets = var.subnets
+
+  secondary_ranges = var.secondary_ranges
 }

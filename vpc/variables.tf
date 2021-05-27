@@ -1,9 +1,18 @@
 variable "project_id" {
   type        = string
-  default     = "zain-314810"
 }
 
 variable "network_name" {
   type        = string
-  default     = "demo"
 }
+
+variable "subnets" {
+  type        = list(map(string))
+}
+
+variable "secondary_ranges" {
+  type        = map(list(object({
+    range_name = string,
+    ip_cidr_range = string})))
+}
+

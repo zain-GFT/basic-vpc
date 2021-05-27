@@ -7,9 +7,9 @@ steps:
       - '-c'
       - |
         export PROJECT_ID=$PROJECT_ID
-        source vpc/trigger.sh
-  # [Run trigger]
-  - id: 'run trigger'
+        source buckets/trigger.sh
+  # [Run Log Bucket trigger]
+  - id: 'run build logs trigger'
     name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
     entrypoint: '/bin/bash'
     args:
@@ -17,10 +17,35 @@ steps:
       - |
         gcloud beta builds triggers run --branch=$BRANCH_NAME build-log-bucket-trigger
   # [delete trigger]
-  - id: 'delete trigger'
+  - id: 'delete build logs trigger'
     name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
     entrypoint: '/bin/bash'
     args:
       - '-c'
       - |
         gcloud --quiet beta builds triggers delete build-log-bucket-trigger
+  # [Create build trigger for the creation of the VPC network]
+  - id: 'create trigger for vpc network'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        export PROJECT_ID=$PROJECT_ID
+        source vpc/trigger.sh
+  # [Run VPC Network trigger]
+  - id: 'run vpc network trigger'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        gcloud beta builds triggers run --branch=$BRANCH_NAME build-vpc-trigger
+  # [delete trigger]
+  - id: 'delete vpc network trigger'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        gcloud --quiet beta builds triggers delete build-vpc-trigger

@@ -1,0 +1,12 @@
+steps:
+  # [Create bucket to store build logs]
+  - id: 'create build logs bucket'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        buckets=$(gsutil ls -p $PROJECT_ID | grep ${REPO_NAME}-build-logs-${PROJECT_ID})
+        if [ -z "$buckets" ]; then
+          gsutil mb -b on -p $PROJECT_ID gs://${REPO_NAME}-build-logs-${PROJECT_ID}
+        fi
