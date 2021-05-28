@@ -1,4 +1,4 @@
-project_id       = "zain-315011"
+project_id       = "iac-orchestration-dev-proj"
 
 network_name     = "iac-orchestration-vpc"
 
