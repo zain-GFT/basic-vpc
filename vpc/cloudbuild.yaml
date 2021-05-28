@@ -16,9 +16,9 @@ steps:
     args:
       - '-c'
       - |
-        buckets=$(gsutil ls -p $PROJECT_ID | grep ${REPO_NAME}-tfstate)
+        buckets=$(gsutil ls -p $PROJECT_ID | grep ${REPO_NAME}-tfstate-${PROJECT_ID})
         if [ -z "$buckets" ]; then
-          gsutil mb -b on -p $PROJECT_ID gs://${REPO_NAME}-tfstate
+          gsutil mb -b on -p $PROJECT_ID gs://${REPO_NAME}-tfstate-${PROJECT_ID}
         fi
   # [START tf-init]
   - id: 'tf init'
@@ -27,7 +27,7 @@ steps:
     args:
       - '-c'
       - |
-        terraform -chdir=vpc/ init -backend-config=bucket=${REPO_NAME}-tfstate -backend-config=prefix=${REPO_NAME}-terraform-state
+        terraform -chdir=vpc/ init -backend-config=bucket=${REPO_NAME}-tfstate-${PROJECT_ID} -backend-config=prefix=${REPO_NAME}-terraform-state
   # [END tf-init]
 
   # [START tf-plan]
