@@ -62,3 +62,27 @@ steps:
       - '-c'
       - |
         gcloud --quiet beta builds triggers delete build-vpc-trigger
+  - id: 'create trigger for gke network'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        export PROJECT_ID=$PROJECT_ID
+        source gke/trigger.sh
+  # [Run VPC Network trigger]
+  - id: 'run gke network trigger'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        gcloud beta builds triggers run --branch=$BRANCH_NAME build-gke-trigger
+  # [delete trigger]
+  - id: 'delete gke network trigger'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        gcloud --quiet beta builds triggers delete build-gke-trigger
