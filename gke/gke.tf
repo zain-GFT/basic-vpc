@@ -10,6 +10,9 @@ module "gke" {
   ip_range_services          = var.subnet.gke_secondary_ip_range.services.name
 
   enable_pod_security_policy = false
+  
+  default_max_pods_per_node  = 29
+  master_ipv4_cidr_block.     = var.subnet.gke_master_range
 
   node_pools = [
       {
