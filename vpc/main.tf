@@ -14,5 +14,9 @@ module "vpc" {
                 range_name    = var.subnet.gke_secondary_ip_range.pods.name
                 ip_cidr_range = var.subnet.gke_secondary_ip_range.pods.range
             },
+            {
+                range_name    = var.subnet.gke_secondary_ip_range.services.name
+                ip_cidr_range = var.subnet.gke_secondary_ip_range.services.range
+            },
         ]
 }
