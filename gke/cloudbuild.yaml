@@ -37,7 +37,7 @@ steps:
     args:
       - '-c'
       - |
-        if [ -f ./envs/"${BRANCH_NAME}.tfvars" ]; then
+        if [ -f ./ends/"${BRANCH_NAME}.tfvars" ]; then
           terraform -chdir=gke/ plan -var-file="../ends/${BRANCH_NAME}.tfvars" -out=iac-plan
         else
           terraform -chdir=gke/ plan -var-file="../ends/DEUBA2.tfvars" -out=iac-plan
@@ -51,7 +51,7 @@ steps:
     args:
       - '-c'
       - |
-        if [ -f ./envs/"${BRANCH_NAME}.tfvars" ]; then
+        if [ -f ./ends/"${BRANCH_NAME}.tfvars" ]; then
           terraform -chdir=gke/ apply --auto-approve iac-plan
         else
           echo "***************************** SKIPPING APPLYING *******************************"
