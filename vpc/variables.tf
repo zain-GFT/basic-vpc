@@ -10,9 +10,26 @@ variable "subnets" {
   type        = list(map(string))
 }
 
-variable "secondary_ranges" {
-  type        = map(list(object({
-    range_name = string,
-    ip_cidr_range = string})))
+variable "subnet" {
+  type = object({
+    name               = string,
+    region             = string,
+    id                 = string,
+    self_link          = string,
+    ip_cidr_range      = string,
+    network            = string,
+    network_project_id = string,
+    gke_secondary_ip_range = object({
+      pods = object({
+        name  = string,
+       range = string
+      }),
+      services = object({
+        name  = string,
+        range = string
+      }),
+    }),
+    gke_master_range = string
+  })
 }
-
+ 
