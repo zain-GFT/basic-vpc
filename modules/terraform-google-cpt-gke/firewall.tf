@@ -6,9 +6,7 @@ resource "google_compute_firewall" "intra_egress" {
   network     = var.network
   priority    = var.firewall_priority
   direction   = "EGRESS"
-  log_config  = {
-    metadata = "INCLUDE_ALL_METADATA"
-     }
+  
   
   target_tags = [local.cluster_network_tag]
   destination_ranges = [
@@ -42,9 +40,7 @@ resource "google_compute_firewall" "master_webhooks" {
   network     = var.network
   priority    = var.firewall_priority
   direction   = "INGRESS"
-  log_config  = {
-    metadata = "INCLUDE_ALL_METADATA"
-     }
+  
   
   source_ranges = [local.cluster_endpoint_for_nodes]
   target_tags   = [local.cluster_network_tag]
