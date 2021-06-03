@@ -13,7 +13,10 @@ module "gke" {
 
   node_pools = [
       {
-          name               = "pool-01"
+          name                    = "pool-01"
+          max_pods_per_node       = 30
+          min_count               = 1
+          max_count               = 1
       }
   ]
   master_authorized_networks = concat([
