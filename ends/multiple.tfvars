@@ -2,6 +2,8 @@ project_id       = "iac-orchestration-dev-proj"
 
 network_name     = "iac-orchestration-vpc"
 
+primary_region.  = "europe-west2"
+
 subnets          = [
   {
     subnet_name = "subnet-01"
