@@ -1,0 +1,62 @@
+steps:
+  - id: 'branch name'
+    name: 'alpine'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "***********************"
+        echo "$BRANCH_NAME"
+        echo "***********************"
+  # [START create bucket to store state if it does not exist already]       
+
+  - id: 'create bucket'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        buckets=$(gsutil ls -p $PROJECT_ID | grep ${REPO_NAME}-tfstate)
+        if [ -z "$buckets" ]; then
+          gsutil mb -b on -p $PROJECT_ID gs://${REPO_NAME}-tfstate
+        fi
+ # [START tf-init] 
+  - id: 'tf init'
+    name: 'hashicorp/terraform:0.14.2'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        terraform -chdir=gke/ init -backend-config=bucket=${REPO_NAME}-tfstate -backend-config=prefix=${REPO_NAME}-terraform-state
+  # [END tf-init]
+  
+  # [START tf-plan]
+  - id: 'tf plan'
+    name: 'hashicorp/terraform:0.14.2'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        if [ -f ./envs/"${BRANCH_NAME}.tfvars" ]; then
+          terraform -chdir=gke/ plan -var-file="./ends/${BRANCH_NAME}.tfvars" -out=iac-plan
+        else
+          terraform -chdir=gke/ plan -var-file="./ends/DEUBA2.tfvars" -out=iac-plan
+        fi
+  # [END tf-plan]
+
+  # [START tf-apply]
+  - id: 'tf apply'
+    name: 'hashicorp/terraform:0.14.2'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        if [ -f ./envs/"${BRANCH_NAME}.tfvars" ]; then
+          terraform -chdir=gke/ apply --auto-approve iac-plan
+        else
+          echo "***************************** SKIPPING APPLYING *******************************"
+          echo "Branch '$BRANCH_NAME' does not represent an oficial organisation."
+          echo "*******************************************************************************"
+        fi
+  # [END tf-apply]
+logsBucket: 'gs://${REPO_NAME}-build-logs-${PROJECT_ID}'
