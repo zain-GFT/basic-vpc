@@ -1,0 +1,19 @@
+name: gcp-profile
+title: GCP InSpec Profile
+summary: An InSpec Compliance Profile For GCP
+version: 0.1.0
+inspec_version: '>= 2.3.5'
+
+inputs:
+- name: project_id
+  required: true
+  description: 'The GCP project identifier.'
+  type: string
+
+depends:
+- name: inspec-gcp
+  url: https://github.com/inspec/inspec-gcp/archive/v1.8.0.zip
+  #path: /tmp/inspec-gcp-1.8.0
+  
+supports:
+- platform: gcp
