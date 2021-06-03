@@ -6,8 +6,8 @@ if [ -z "$triggers" ]; then
 gcloud beta builds triggers create github \
 --repo-name="iac-orchestration" \
 --repo-owner="CPT-CE" \
---name="build-gke-trigger" \ 
+--name="build-gke-trigger" \
 --build-config="gke/cloudbuild.yaml" \
---branch-pattern=".*"
+--branch-pattern=".*" \
 --included-files="gke/*"
 fi
