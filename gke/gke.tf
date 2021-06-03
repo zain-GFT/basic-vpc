@@ -16,4 +16,10 @@ module "gke" {
           name               = "pool-01"
       }
   ]
+  master_authorized_networks = concat([
+    {
+      cidr_block       = var.subnet.ip_cidr_range
+      display_name     = "VPC"
+    }
+  ])
 }
