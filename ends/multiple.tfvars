@@ -21,7 +21,7 @@ subnet = {
   gke_secondary_ip_range = {
     pods = {
       name   = "pods"
-      range  = "10.10.20.0/24"
+      range  = "192.168.32.0/24"
     },
     services = {
       name   = "services"
