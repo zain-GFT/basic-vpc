@@ -29,7 +29,6 @@ variable "subnet" {
         range = string
       }),
     }),
-    gke_master_range = string
   })
 }
  
