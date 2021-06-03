@@ -9,7 +9,11 @@ variable "network_name" {
 variable "primary_region" {
   type = string
 }
- 
+
+variable "subnets" {
+  type        = list(map(string))
+}
+
 variable "subnet" {
   type = object({
     name               = string,
