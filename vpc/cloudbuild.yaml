@@ -30,7 +30,7 @@ steps:
         terraform -chdir=vpc/ init -backend-config=bucket=${REPO_NAME}-tfstate-${PROJECT_ID} -backend-config=prefix=${REPO_NAME}-terraform-state
         terraform state pull
         terraform state rm 'module.vpc'
-        terraform state push default.tfstate
+        terraform state push 
   # [END tf-init]
 
   # [START tf-plan]
