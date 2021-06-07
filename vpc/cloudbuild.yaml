@@ -28,6 +28,9 @@ steps:
       - '-c'
       - |
         terraform -chdir=vpc/ init -backend-config=bucket=${REPO_NAME}-tfstate-${PROJECT_ID} -backend-config=prefix=${REPO_NAME}-terraform-state
+        terraform state pull
+        terraform state rm 'module.vpc'
+        terraform state push default.tfstate
   # [END tf-init]
 
   # [START tf-plan]
@@ -52,7 +55,7 @@ steps:
       - '-c'
       - |
         if [ -f ./ends/"${BRANCH_NAME}.tfvars" ]; then
-          terraform -chdir=vpc/ apply --auto-approve iac-plan
+          terraform -chdir=vpc/ apply iac-plan
         else
           echo "***************************** SKIPPING APPLYING *******************************"
           echo "Branch '$BRANCH_NAME' does not represent an oficial organisation."
