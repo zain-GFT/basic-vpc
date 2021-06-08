@@ -60,3 +60,4 @@ steps:
         fi
   # [END tf-apply]
 logsBucket: 'gs://${REPO_NAME}-build-logs-${PROJECT_ID}'
+timeout: 3600s
