@@ -11,6 +11,8 @@ module "gke" {
 
   enable_pod_security_policy = false
   skip_provisioners          = true
+  enable_shielded_nodes      = true
+  enable_bastion             = true
   
   default_max_pods_per_node  = 29
 
@@ -20,6 +22,9 @@ module "gke" {
           max_pods_per_node       = 30
           min_count               = 1
           max_count               = 1
+          enable_secure_boot      = true
+          image_type              = "COS"
+        
       }
   ]
   master_authorized_networks = concat([
