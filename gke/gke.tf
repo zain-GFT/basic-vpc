@@ -42,7 +42,8 @@ module "gke" {
   kubernetes_version         = data.google_container_engine_versions.k8s_version.release_channel_default_version["REGULAR"]
   
   enable_bastion             = true
-
+  enable_private_endpoint    = true
+  
   default_max_pods_per_node  = local.default_pods_per_node
   # ignore scrips in module to echo cluster has been created
   skip_provisioners = true
