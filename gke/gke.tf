@@ -50,7 +50,7 @@ module "gke" {
   
   node_pools = [
       {
-          name               = "pool-01"
+          name               = "pool-02"
           max_pods_per_node  = local.node_pool_max_pods
           min_count          = local.node_pool_min_nodes
           max_count          = local.node_pool_max_nodes
