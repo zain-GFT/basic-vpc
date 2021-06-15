@@ -9,5 +9,5 @@ gcloud beta builds triggers create github \
 --name="build-gke-trigger" \
 --build-config="gke/cloudbuild.yaml" \
 --branch-pattern=".*" \
---included-files="gke/*"
+--included-files="gke/**"
 fi
