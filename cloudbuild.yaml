@@ -15,15 +15,12 @@ steps:
     args:
       - '-c'
       - |
+        buckets=$(gsutil ls -p $PROJECT_ID | grep ${REPO_NAME}-build-logs-${PROJECT_ID})
+        if [ -z "$buckets" ]; then
         gcloud beta builds triggers run --branch=$BRANCH_NAME build-log-bucket-trigger
-  # [delete trigger]
-  - id: 'delete build logs trigger'
-    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
-    entrypoint: '/bin/bash'
-    args:
-      - '-c'
-      - |
-        gcloud --quiet beta builds triggers delete build-log-bucket-trigger
+        else
+        echo "Phase 1 has already been completed, trigger does not require manual invocation"
+        fi
   # [wait for log bucket creation]
   - id: 'wait for log bucket creation'
     name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
@@ -53,15 +50,26 @@ steps:
     args:
       - '-c'
       - |
+        vpc=$(gcloud compute networks list --project=$PROJECT_ID | grep iac-orchestration-vpc)
+        if [ -z "$vpc" ]; then
         gcloud beta builds triggers run --branch=$BRANCH_NAME build-vpc-trigger
-  # [delete trigger]
-  - id: 'delete vpc network trigger'
+        else
+        echo "Phase 1 has already been completed, trigger does not require manual invocation"
+        fi
+  # [wait for VPC network creation]
+  - id: 'wait for VPC network creation'
     name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
     entrypoint: '/bin/bash'
     args:
       - '-c'
       - |
-        gcloud --quiet beta builds triggers delete build-vpc-trigger
+        vpc=$(gcloud compute networks list --project=$PROJECT_ID | grep iac-orchestration-vpc)
+        while [ -z "$vpc" ]
+        do
+        vpc=$(gcloud compute networks list --project=$PROJECT_ID | grep iac-orchestration-vpc)
+        sleep 10
+        done
+  # [create trigger for GKE]
   - id: 'create trigger for gke network'
     name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
     entrypoint: '/bin/bash'
@@ -70,19 +78,16 @@ steps:
       - |
         export PROJECT_ID=$PROJECT_ID
         source gke/trigger.sh
-  # [Run VPC Network trigger]
+  # [Run GKE trigger]
   - id: 'run gke network trigger'
     name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
     entrypoint: '/bin/bash'
     args:
       - '-c'
       - |
+        gke=$(gcloud container clusters list --project=$PROJECT_ID | grep tekton)
+        if [ -z "$gke" ]; then
         gcloud beta builds triggers run --branch=$BRANCH_NAME build-gke-trigger
-  # [delete trigger]
-  - id: 'delete gke network trigger'
-    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
-    entrypoint: '/bin/bash'
-    args:
-      - '-c'
-      - |
-        gcloud --quiet beta builds triggers delete build-gke-trigger
+        else
+        echo "Phase 1 has already been completed, trigger does not require manual invocation"
+        fi
